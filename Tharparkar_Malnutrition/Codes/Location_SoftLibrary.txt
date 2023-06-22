@@ -1,0 +1,1 @@
+C:\Users\hpcc\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.3\libraries\SoftwareSerial

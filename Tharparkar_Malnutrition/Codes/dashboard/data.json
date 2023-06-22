@@ -1,0 +1,21 @@
+dynamodb.us-east-1.amazonaws.com
+443
+POST https://dynamodb.us-east-1.amazonaws.com/ HTTP/1.1
+content-length:144
+content-type:application/x-amz-json-1.0
+host:dynamodb.us-east-1.amazonaws.com
+x-amz-date:TZ
+x-amz-target:DynamoDB_20120810.GetItem
+Authorization: AWS4-HMAC-SHA256 Credential=AKIAZZZNWBLN3O3MH24V//us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-target, Signature=7ad83f8097b654f262eafc918a0b4865a8115a1baddd62d745f38bff099206db
+
+{
+    "Node1": {
+      "2022-02-11 15:09:07": {
+        "Humidity": 45.8457,
+        "PH": 7.1,
+        "Pressure": 1010.2417,
+        "Temperature": 25.31,
+        "Turbidity": 100
+      }
+    }
+}

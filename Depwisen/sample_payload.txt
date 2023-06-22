@@ -1,0 +1,103 @@
+{
+  "end_device_ids": {
+    "device_id": "eui-0004a30b001bdbe8",
+    "application_ids": {
+      "application_id": "depwisen"
+    },
+    "dev_eui": "0004A30B001BDBE8",
+    "join_eui": "0000000000000000",
+    "dev_addr": "260B6B21"
+  },
+  "correlation_ids": [
+    "as:up:01FY3KS71148MFVYH8NFWNF5CX",
+    "gs:conn:01FXHXCN3G3W9SZK3F16H79J70",
+    "gs:up:host:01FXHXCNVT3QEDNWY36YCXSNPP",
+    "gs:uplink:01FY3KS6TG1Q08CKPZCP1E03CP",
+    "ns:uplink:01FY3KS6TH7EC34DKP65336AM7",
+    "rpc:/ttn.lorawan.v3.GsNs/HandleUplink:01FY3KS6TGE8HCV6QS7GN3E7EQ",
+    "rpc:/ttn.lorawan.v3.NsAs/HandleUplink:01FY3KS7100Y29HNYHR4MP6TJM"
+  ],
+  "received_at": "2022-03-14T07:02:50.657567868Z",
+  "uplink_message": {
+    "session_key_id": "AX9pLU5j1mAbqPsOQG5b/g==",
+    "f_port": 1,
+    "f_cnt": 7123,
+    "frm_payload": "AAAIjgtyAAAAAAAAAMgO2AAA/8z/+XVZAFVASwAA",
+    "decoded_payload": {
+      "Air_quality": 38,
+      "Audio": 0,
+      "CO_level": 0,
+      "Elevation": 65484,
+      "IR_light": 2,
+      "Latitude": -4.28711,
+      "Longitude": 55.87019,
+      "UV_light": 0,
+      "Vis_light": 0,
+      "device_name": "UK-GLA-001",
+      "humidity": 29.3,
+      "smoke": 0,
+      "soil_humidity": 0,
+      "temperature": 21.9
+    },
+    "rx_metadata": [
+      {
+        "gateway_ids": {
+          "gateway_id": "glasgow-uni-1030",
+          "eui": "0000024B0B030F68"
+        },
+        "time": "2022-03-14T07:02:50.429513Z",
+        "timestamp": 929638068,
+        "rssi": -108,
+        "channel_rssi": -108,
+        "snr": 5.8,
+        "uplink_token": "Ch4KHAoQZ2xhc2dvdy11bmktMTAzMBIIAAACSwsDD2gQtM2kuwMaDAia0buRBhDp3NjVASCg3vyVh+iNASoMCJrRu5EGEKiy58wB",
+        "channel_index": 6
+      },
+      {
+        "gateway_ids": {
+          "gateway_id": "depwisengateway-1",
+          "eui": "58A0CBFFFE80347D"
+        },
+        "time": "2022-03-14T07:02:50.412728071Z",
+        "timestamp": 3185429460,
+        "rssi": -53,
+        "channel_rssi": -53,
+        "snr": 6.75,
+        "uplink_token": "Ch8KHQoRZGVwd2lzZW5nYXRld2F5LTESCFigy//+gDR9ENSX9+4LGgwImtG7kQYQ0Zmj4wEgoOiQ09rWAioMCJrRu5EGEIf25sQB"
+      }
+    ],
+    "settings": {
+      "data_rate": {
+        "lora": {
+          "bandwidth": 125000,
+          "spreading_factor": 7
+        }
+      },
+      "coding_rate": "4/5",
+      "frequency": "867700000",
+      "timestamp": 929638068,
+      "time": "2022-03-14T07:02:50.429513Z"
+    },
+    "received_at": "2022-03-14T07:02:50.449015182Z",
+    "consumed_airtime": "0.087296s",
+    "locations": {
+      "frm-payload": {
+        "latitude": -4.28711,
+        "longitude": 55.87019,
+        "source": "SOURCE_GPS"
+      }
+    },
+    "version_ids": {
+      "brand_id": "the-things-products",
+      "model_id": "the-things-uno",
+      "hardware_version": "1.0",
+      "firmware_version": "quickstart",
+      "band_id": "EU_863_870"
+    },
+    "network_ids": {
+      "net_id": "000013",
+      "tenant_id": "ttn",
+      "cluster_id": "ttn-eu1"
+    }
+  }
+}

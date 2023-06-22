@@ -1,0 +1,9 @@
+FIREBASE_HOST
+https://esp32-test-project-a01-default-rtdb.firebaseio.com/
+
+Web API Key
+AIzaSyB8yUgmsH23HuQ4tI_XEuL3V9EXouLG40g
+
+
+esp32-test-project-a01-default-rtdb	
+mgqNwC71uXQ9xizdRhveS78tFxizsZXcnIfWT31a

@@ -1,0 +1,5 @@
+Error: KeyEncryptionKey153AA9B3
+User: arn:aws:iam::673868810971:user/sensor-user is not authorized to perform: secretsmanager:GetRandomPassword because no identity-based policy allows the secretsmanager:GetRandomPassword action (Service: AWSSecretsManager; Status Code: 400; Error Code: AccessDeniedException; Request ID: cab59db3-baa4-40f3-84cc-2d9ab8a8c4e3; Proxy: null)
+
+Error: ThingLogGroup7097DEA1
+Resource handler returned message: "User: arn:aws:iam::673868810971:user/sensor-user is not authorized to perform: logs:CreateLogGroup on resource: arn:aws:logs:us-east-1:673868810971:log-group:/thethings/lorawan/TEST-STACK-DEPWISEN/things:log-stream: because no identity-based policy allows the logs:CreateLogGroup action (Service: CloudWatchLogs, Status Code: 400, Request ID: 6879d897-3052-493f-89a9-f67aa9e5007b, Extended Request ID: null)" (RequestToken: 9ba86781-5cf1-b67e-e014-1ed91089131c, HandlerErrorCode: GeneralServiceException)

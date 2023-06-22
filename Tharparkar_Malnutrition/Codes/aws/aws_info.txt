@@ -1,0 +1,309 @@
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html
+
+The Partition key is set to be the ID of the Node for example Node1
+
+The sort key of the Database is set to be "TakenAt" which basically means the time that the reading was recorded at.
+
+So basically,
+
+We have a table called NodeData,
+Each reading will be treated as an Item pertaining to the table.
+And readings and keys will be set as attributes of the data.
+
+The schema (non schema in case of AWS) will be as follows
+
+NodeData -------- (name of Table)
+|_Node1:                    (Partition key)
+|_datetime:                 (Sort Key)
+|_Temperature:
+|_Humidity:
+|_Pressure:
+|_PH:
+|_Turbidity:
+
+
+The Partition Key and Sort key will combine to form a Primary Key and is called a composite Primary Key.
+DynamoDB uses the partition key value as input to an internal hash function. The output from the hash function determines 
+the partition (physical storage internal to DynamoDB) in which the item will be stored. All items with the same partition key value are stored together, 
+in sorted order by sort key value.
+
+In a table that has a partition key and a sort key, it's possible for multiple items to have the same partition key value. 
+However, those items must have different sort key values.
+
+HOW TO GET ENDPOINTS
+---------------------
+https://docs.aws.amazon.com/general/latest/gr/rande.html
+
+Python Function for Updating data
+def put(self, Sensor_Id='' , Temperature='', Humidity=''):
+        self.table.put_item(
+            Item={
+                'Sensor_Id':Sensor_Id,
+                'Temperature':Temperature,
+                'Humidity' :Humidity
+            }
+        )
+
+put(Sensor_Id=str(counter), Temperature=str(Temperature), Humidity=str(Humidity))
+
+-----------------------------------x--------------------------x-----------------------------x--------------------------x
+
+Found something, in AmazonDynamoDBClient.h
+/* <p>Represents a request to perform a <i>PutItem</i> operation on an item.</p> Line 301 */
+class PutRequest{
+    MinimalMap<AttributeValue > item;
+    bool itemBeenSet;
+    void reset();
+public:
+    PutRequest();
+    bool jsonDeserialize(MinimalString json);
+    MinimalString jsonSerialize() const;
+    void setItem(MinimalMap<AttributeValue > item);
+    MinimalMap<AttributeValue > getItem() const;
+};
+
+And,
+line 1490 in AmazonDynamoDBClient.cpp,
+
+void PutRequest::setItem(MinimalMap<AttributeValue > item) {
+    itemBeenSet = true;
+    this->item = item;
+}
+
+PUTITEMOUTPUT --> LINE 6067
+PutItemInput --> LINE 4874
+
+
+
+And for updating the Item
+Around LINE 3360
+For Updating Item input
+LINE 5457
+For Updating Item output
+Line 6649
+
+
+For Getting an item
+Around Line 5780
+
+
+Code for INITIALIZATION:+++++==========+++++++============= LINE 6084
+AmazonDynamoDBClient::AmazonDynamoDBClient() : AWSClient() {
+    awsService = SERVICE;
+}
+
+
+BATCH WRITE ITEM OUTPUT --> LINE 6139
+
+Total Code Length for AmazonDynamoDBClient.cpp --> 6749
+
+
+==================================
+What TIME Format to USE??
+ISO8601 --> 1994-11-05T13:15:30Z
+==================================
+
+/* Set values for putItemInput. */
+        putItemInput.setItem(MinimalMap < AttributeValue > (itemArray, 2));
+        putItemInput.setTableName(TABLE_NAME);
+
+
+But how to set attribute value?
+
+Some more info form AmazonDynamoDBClient.h Line 985
+/* <p>Represents the input of a <i>PutItem</i> operation.</p> */
+class PutItemInput{
+    ReturnItemCollectionMetrics returnItemCollectionMetrics;
+    ReturnValue returnValues;
+    MinimalMap<AttributeValue > item;
+    ConditionalOperator conditionalOperator;
+    MinimalMap<ExpectedAttributeValue > expected;
+    MinimalString tableName;
+    ReturnConsumedCapacity returnConsumedCapacity;
+    bool returnItemCollectionMetricsBeenSet;
+    bool returnValuesBeenSet;
+    bool itemBeenSet;
+    bool conditionalOperatorBeenSet;
+    bool expectedBeenSet;
+    bool tableNameBeenSet;
+    bool returnConsumedCapacityBeenSet;
+    void reset();
+public:
+    PutItemInput();
+    bool requiredAreSet() const;
+    MinimalString jsonSerialize() const;
+    void setReturnItemCollectionMetrics(ReturnItemCollectionMetrics returnItemCollectionMetrics);
+    void setReturnValues(ReturnValue returnValues);
+    void setItem(MinimalMap<AttributeValue > item);                                             // after request, use this in conjunction with PutItemInput's created object.
+    void setConditionalOperator(ConditionalOperator conditionalOperator);
+    void setExpected(MinimalMap<ExpectedAttributeValue > expected);
+    void setTableName(MinimalString tableName);                                                 // we also have to use this as well to set our table name.
+    void setReturnConsumedCapacity(ReturnConsumedCapacity returnConsumedCapacity);
+    ReturnItemCollectionMetrics getReturnItemCollectionMetrics() const;
+    ReturnValue getReturnValues() const;
+    MinimalMap<AttributeValue > getItem() const;
+    ConditionalOperator getConditionalOperator() const;
+    MinimalMap<ExpectedAttributeValue > getExpected() const;
+    MinimalString getTableName() const;
+    ReturnConsumedCapacity getReturnConsumedCapacity() const;
+};
+
+
+Then after putItemInput we will use the following, and hopefully it will all work.
+/* perform putItem and check for errors. */
+        PutItemOutput putItemOutput = ddbClient.putItem(putItemInput,
+                actionError);
+
+
+so basically,
+assign values
+generate putItemRequest
+generate putItemInput
+send it to PutItemOutput
+
+And this should hopefully do it.
+
+
+# defining attributes
+const Aws::String table = (argv[1]);
+const Aws::String key = (argv[2]);
+const Aws::String keyVal = (argv[3]);
+const Aws::String albumTitle = (argv[4]);
+const Aws::String AlbumTitleValue = (argv[5]);
+const Aws::String Awards = (argv[6]);
+const Aws::String AwardVal = (argv[7]);
+const Aws::String SongTitle = (argv[8]);
+const Aws::String SongTitleVal = (argv[9]);
+
+
+BUT WHAT IS AN ATTRIBUTE VALUE? According AmazonDynamoDBClient.h Line 155
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class AttributeValue{
+    MinimalList<MinimalString > SS;
+    MinimalList<MinimalString > BS;
+    MinimalString B;
+    MinimalString S;
+    MinimalList<MinimalString > NS;
+    MinimalString N;
+    bool SSBeenSet;
+    bool BSBeenSet;
+    bool BBeenSet;
+    bool SBeenSet;
+    bool NSBeenSet;
+    bool NBeenSet;
+    void reset();
+public:
+    AttributeValue();
+    bool jsonDeserialize(MinimalString json);
+    MinimalString jsonSerialize() const;
+    void setSS(MinimalList<MinimalString > SSS);
+    void setBS(MinimalList<MinimalString > BS);
+    void setB(MinimalString B);
+    void setS(MinimalString S);
+    void setNS(MinimalList<MinimalString > NS);
+    void setN(MinimalString N);
+    MinimalList<MinimalString > getSS() const;
+    MinimalList<MinimalString > getBS() const;
+    MinimalString getB() const;
+    MinimalString getS() const;
+    MinimalList<MinimalString > getNS() const;
+    MinimalString getN() const;
+};
+
+
+Partition key is also called HASH Key
+whereas Sort key is also sometimes referred to as Range key.
+
+POST REQUEST FOR DynamoDB
+)()()()()()()()()()()()()
+POST / HTTP/1.1
+Host: dynamodb.<region>.<domain>;
+Accept-Encoding: identity
+Content-Length: <PayloadSizeBytes>
+User-Agent: <UserAgentString>
+Content-Type: application/x-amz-json-1.0
+Authorization: AWS4-HMAC-SHA256 Credential=<Credential>, SignedHeaders=<Headers>, Signature=<Signature>
+X-Amz-Date: <Date> 
+X-Amz-Target: DynamoDB_20120810.GetItem
+
+{
+    "TableName": "Pets",
+    "Key": {
+        "AnimalType": {"S": "Dog"},
+        "Name": {"S": "Fido"}
+    }
+}
+
+here HASH key name or Partition key name is called 'id'
+here HASH key value will be Node1 or the also saved as PART_KEY
+
+here Range Key Name or Sort key name is 'TakenAt'
+here Ramge Key value will be the datentime value also saved in the variable SORT_KEY.
+
+
+//////////////////////////////
+PUT REQUEST vs PUT ITEM INPUT
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+class PutRequest{
+    MinimalMap<AttributeValue > item;
+    bool itemBeenSet;
+    void reset();
+public:
+    PutRequest();
+    bool jsonDeserialize(MinimalString json);
+    MinimalString jsonSerialize() const;
+    void setItem(MinimalMap<AttributeValue > item);
+    MinimalMap<AttributeValue > getItem() const;
+};
+
+class PutItemInput{
+    ReturnItemCollectionMetrics returnItemCollectionMetrics;
+    ReturnValue returnValues;
+    MinimalMap<AttributeValue > item;
+    ConditionalOperator conditionalOperator;
+    MinimalMap<ExpectedAttributeValue > expected;
+    MinimalString tableName;
+    ReturnConsumedCapacity returnConsumedCapacity;
+    bool returnItemCollectionMetricsBeenSet;
+    bool returnValuesBeenSet;
+    bool itemBeenSet;
+    bool conditionalOperatorBeenSet;
+    bool expectedBeenSet;
+    bool tableNameBeenSet;
+    bool returnConsumedCapacityBeenSet;
+    void reset();
+public:
+    PutItemInput();
+    bool requiredAreSet() const;
+    MinimalString jsonSerialize() const;
+    void setReturnItemCollectionMetrics(ReturnItemCollectionMetrics returnItemCollectionMetrics);
+    void setReturnValues(ReturnValue returnValues);
+    void setItem(MinimalMap<AttributeValue > item);
+    void setConditionalOperator(ConditionalOperator conditionalOperator);
+    void setExpected(MinimalMap<ExpectedAttributeValue > expected);
+    void setTableName(MinimalString tableName);
+    void setReturnConsumedCapacity(ReturnConsumedCapacity returnConsumedCapacity);
+    ReturnItemCollectionMetrics getReturnItemCollectionMetrics() const;
+    ReturnValue getReturnValues() const;
+    MinimalMap<AttributeValue > getItem() const;
+    ConditionalOperator getConditionalOperator() const;
+    MinimalMap<ExpectedAttributeValue > getExpected() const;
+    MinimalString getTableName() const;
+    ReturnConsumedCapacity getReturnConsumedCapacity() const;
+};
+
+
+
+][][][][][][][][][][][][][
+    TEST NODE 1 JSON FILE DATA
+    {
+    "Temperature": 24.82999992,
+    "Humidity": 57.79199219,
+    "Pressure": 1002.748108,
+    "id": "Node1",
+    "TakenAt": "2022-02-22 14:24:02",
+    "PH": 0,
+    "Turbidity": 0
+    }
+][][][][][][][][][][][][][]

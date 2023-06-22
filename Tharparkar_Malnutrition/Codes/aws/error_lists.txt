@@ -1,0 +1,86 @@
+The following errors have been generated,
+
+did not connect to timeserver
+
+Connection Unsuccessful
+assertion "heap != NULL && "free() target pointer is outside heap areas"" failed: file "/home/runner/work/esp32-arduino-lib-builder/esp32-arduino-lib-builder/esp-idf/components/heap/heap_caps.c", line 267, function: heap_caps_free
+abort() was called at PC 0x400f796f on core 1
+
+443
+POST https://dynamodb.us-east-1.https://dynamodb.us-east-1.amazonaws.com/ HTTP/1.1
+content-length:174
+content-type:application/x-amz-json-1.0
+host:dynamodb.us-east-1.https://dynamodb.us-east-1.amazonaws.com
+x-amz-date:TZ
+x-amz-target:DynamoDB_20120810.PutItem
+Authorization: AWS4-HMAC-SHA256 Credential=AKIAZZZNWBLN3O3MH24V//us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-target, Signature=272c9fd665db08f058d8d41530bfc372b7e8aa679460edb99d6d72499a5bf11e
+Connection:close
+
+{"Item":{"id":{"S":"Node1"},"TakenAt":{"S":"1970-01-01 05:00:11"},"Temperature":{"S":"536870912"},"Pressure":{"S":"-1610612736"},"Humidity":{"S":"0"}},"TableName":"NodeData"}
+
+What it should be?
+)()()()()()()()()()
+POST / HTTP/1.1
+Host: dynamodb.<region>.<domain>;
+Accept-Encoding: identity
+Content-Length: <PayloadSizeBytes>
+User-Agent: <UserAgentString>
+Content-Type: application/x-amz-json-1.0
+Authorization: AWS4-HMAC-SHA256 Credential=<Credential>, SignedHeaders=<Headers>, Signature=<Signature>
+X-Amz-Date: <Date> 
+X-Amz-Target: DynamoDB_20120810.GetItem
+
+What I am getting..
+())()()()()()()()()
+dynamodb.us-east-1.amazonaws.com
+443
+POST https://dynamodb.us-east-1.amazonaws.com/ HTTP/1.1
+content-length:176
+content-type:application/x-amz-json-1.0
+host:dynamodb.us-east-1.amazonaws.com
+x-amz-date:TZ
+x-amz-target:DynamoDB_20120810.PutItem
+Authorization: AWS4-HMAC-SHA256 Credential=AKIAZZZNWBLN3O3MH24V//us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-target, Signature=c5895bf7c808ee4ddb97f3f930200410673eba41b603ffccd5f4a2abd446bb2c
+Connection:close
+
+{"Item":
+    {
+        "id":{"S":"Node1"},
+        "TakenAt":{"S":"1970-01-01 05:01:00"},
+        "Temperature":{"S":"-2147483648"},
+        "Pressure":{"S":"-2147483648"},
+        "Humidity":{"S":"0"}
+    },
+    "TableName":"NodeData"}
+
+
+AND THE GET REQUEST,
+/\/\/\/\/\/\/\/\/\/\
+dynamodb.us-east-1.amazonaws.com
+443
+POST https://dynamodb.us-east-1.amazonaws.com/ HTTP/1.1
+content-length:144
+content-type:application/x-amz-json-1.0
+host:dynamodb.us-east-1.amazonaws.com
+x-amz-date:TZ
+x-amz-target:DynamoDB_20120810.GetItem
+Authorization: AWS4-HMAC-SHA256 Credential=AKIAZZZNWBLN3O3MH24V//us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-target, Signature=7ad83f8097b654f262eafc918a0b4865a8115a1baddd62d745f38bff099206db
+
+{"Key":{"id":{"S":"Node1"},"TakenAt":{"S":"1970-01-0105:00:11"}},"AttributesToGet":["Temperature","Pressure","Humidity"],"TableName":"NodeData"}
+
+
+POST / HTTP/1.1
+Host: dynamodb.<region>.<domain>;
+Accept-Encoding: identity
+Content-Length: <PayloadSizeBytes>
+User-Agent: <UserAgentString>
+Content-Type: application/x-amz-json-1.0
+Authorization: AWS4-HMAC-SHA256 Credential=<Credential>, SignedHeaders=<Headers>, Signature=<Signature>
+X-Amz-Date: <Date> 
+X-Amz-Target: DynamoDB_20120810.GetItem
+
+
+IOT CORE
+Data format
+Library
+Certificates
